@@ -1,2 +1,7 @@
 # Export-TeamsGuests.ps1
-A script to export a CSV of guests in MS Teams
+A script for MS Teams to export a CSV to the desktop containing guests and their Teams
+
+Example:
+```
+   .\Export-TeamsGuests.ps1 -username admin@domain.com
+```
