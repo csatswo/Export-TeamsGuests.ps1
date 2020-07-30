@@ -12,7 +12,7 @@
     
 .LINK
 
-    Github: https://
+    Github: https://github.com/csatswo/Export-TeamsGuests.ps1
  
 .EXAMPLE 
     
