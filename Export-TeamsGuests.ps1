@@ -18,7 +18,6 @@
     
     .\Get-TeamsGuests.ps1 -username admin@domain.com
 
-
 #>
 
 # Script setup
@@ -51,17 +50,27 @@ Import-Module MicrosoftTeams
 Connect-MicrosoftTeams -AccountId $username
 
 Write-Host
-Add-Content -Path $home\Desktop\ExternalTeamsUsers.csv -Value "TeamName,GuestUser"
-$teams = Get-Team
-Foreach ($team in $teams) {
-    $teamid = $team.GroupId
-    $teamname = $team.DisplayName
-    $guests = Get-TeamUser -GroupId $teamid -Role Guest
-    Foreach ($guest in $guests) {
-        $guestname = $guest.User
-        Write-Host ($teamname,$guestname) -Separator " --> "
-        Add-Content -Path $home\Desktop\ExternalTeamsUsers.csv -Value "$teamname,$guestname"
+if (Test-Path $home\Desktop) {
+    
+    Add-Content -Path $home\Desktop\ExternalTeamsUsers.csv -Value "TeamName,GuestUser"
+    $teams = Get-Team
+    Foreach ($team in $teams) {
+        $teamid = $team.GroupId
+        $teamname = $team.DisplayName
+        $guests = Get-TeamUser -GroupId $teamid -Role Guest
+        Foreach ($guest in $guests) {
+            $guestname = $guest.User
+            Write-Host ($teamname,$guestname) -Separator " --> "
+            Add-Content -Path $home\Desktop\ExternalTeamsUsers.csv -Value "$teamname,$guestname"
+            }
         }
-    }
+    
+    Write-Host ""`nReport saved at" $home\Desktop\ExternalTeamsUsers.csv" -ForegroundColor Cyan
 
-Write-Host ""`nReport saved at" $home\Desktop\ExternalTeamsUsers.csv" -ForegroundColor Cyan
+} Else {
+    
+    Write-Host ""`nThe path $home\Desktop\ is not valid"" -ForegroundColor Red
+
+    break
+
+}
