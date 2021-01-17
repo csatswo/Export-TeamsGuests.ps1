@@ -50,10 +50,35 @@ if (Get-Module -ListAvailable -Name MicrosoftTeams) {
 
 }
 
-# Connect to MS Teams
+# Check if Teams is connected
 
-Import-Module MicrosoftTeams
-Connect-MicrosoftTeams -AccountId $Username
+function TeamsConnected {
+    
+    Get-CsOnlineSipDomain -ErrorAction SilentlyContinue | Out-Null
+    $result = $?
+    return $result
+
+}
+
+if (-not (TeamsConnected)) {
+
+    if (Get-Module -ListAvailable -Name MicrosoftTeams) {
+    
+        # Connect to Microsoft Teams
+        Write-Host "`nTeams module installed" -ForegroundColor Green
+        Import-Module MicrosoftTeams
+        Import-PSSession -Session (New-CsOnlineSession) | Out-Null
+    
+    } else {
+    
+        # Install module and connect to Microsoft Teams
+        Write-Host "`nTeams module is not installed" -ForegroundColor Yellow
+        Write-Host "`nInstalling module and creating PowerShell session..."
+        Install-Module MicrosoftTeams
+        Import-PSSession -Session (New-CsOnlineSession) | Out-Null
+    
+    }
+}
 
 # Start script loops
 
